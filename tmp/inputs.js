@@ -8,7 +8,7 @@ let moveUpL = false, moveDownL = false, moveUpR = false, moveDownR = false;
 // Key Press (Start Movement)
 window.addEventListener('keydown', (e) => {
     switch (e.key) {
-        case "w": case "W": moveUpR = true; break;
+        case "w": case "W": moveUpR = true; console.log("dsdfsd"); break;
         case "s": case "S": moveDownR = true; break;
         case "ArrowUp": moveUpL = true; break;
         case "ArrowDown": moveDownL = true; break;

@@ -27,7 +27,7 @@ const maxZ = g_height - (paddle_depth * 2 );
 // Function to reset the ball 
 function resetBall()
 {
-    ball.position = new BABYLON.Vector3(0, ballRadius, 0);
+    ball.position = new BABYLON.Vector3(0, b_diameter, 0);
     // Randomize the initial direction on reset
     ballDirection.x = (Math.random() > 0.5 ? 1 : -1) * ballSpeed;
     ballDirection.z = (Math.random() > 0.5 ? 1 : -1) * ballSpeed;
@@ -37,11 +37,10 @@ function resetBall()
 
 function handleScore()
 {
-
     if( r_score > 2 || l_score > 2)
         stopGame();
-
 }
+
 function stopGame() {
     isGameRunning = false;
     engine.stopRenderLoop(); // Stops rendering
@@ -54,22 +53,59 @@ function ballMovement()
 
     // Move the ball
     ball.position.addInPlace(ballDirection)
+    ball.position.x+=0.1
     /*========== COLLISSION =========== */
 
      /* :::::: WALL ::::::: */
     // For simplicity, we’ll use z boundaries for vertical limits:
+    if (ball.intersectsMesh(r_paddle, false)) {
+   //     ballDirection.z *= -1; // Reverse the Y direction (bounce effect)   
+        ballDirection.x *= -1;
+        ballDirection.y *= -1;
+        console.log(" *** R paddle ! **** ");
+        return;
+    }
+   else if (ball.intersectsMesh(l_paddle, false)) {
+     //   ballDirection.z *= -1; // Reverse the Y direction (bounce effect)   
+        ballDirection.x *= -1; 
+        ballDirection.y *= -1;
+        console.log(" *** L paddle ! **** ");
+        return;
+    }
     if (ball.position.z < minZ || ball.position.z > maxZ) {
         ballDirection.z *= -1;
-    }
-    if (ball.position.x < -g_width/2|| ball.position.x > g_width/2) {
-        if(ball.position.x < -g_width/2)
+        return;
+        }
+        /* 
+   else  if (ball.position.x < -g_width/2|| ball.position.x > g_width/2) {
+        if(ball.position.x < -g_width/2){
+            if(ball.intersectsMesh(r_paddle, false))
+                ballDirection.z *= -1; // Reverse the Y direction (bounce effect)   
+            else {
                 r_score++;
-        else
+                resetBall()
+                console.log("R scored"); 
+                return;
+
+            }
+        }
+        else{
+            if(ball.intersectsMesh(l_paddle, false))
+                ballDirection.z *= -1; // Reverse the Y direction (bounce effect)   
+            else {
                 l_score++;
-        ballDirection.x *= -1;
+                resetBall()
+                console.log("L scored"); 
+                return;
+
+
+            }
+        }
+      //  ballDirection.x *= -1;
     }
-    console.log("SCORE\n R:",r_score);
-    console.log("SCORE\n l:",l_score);
+  */
+   // console.log("SCORE\n R:",r_score);
+   // console.log("SCORE\n l:",l_score);
 }
 
 
@@ -77,11 +113,19 @@ function ballMovement()
 function paddleMovement()
 {
 
-
-    if (moveUpR) r_paddle.position.z += paddleSpeed;
-    if (moveDownR) r_paddle.position.z -= paddleSpeed;
-    if (moveUpL) l_paddle.position.z += paddleSpeed;
-    if (moveDownL) l_paddle.position.z -= paddleSpeed;
+    //console.log("valuye : ",- g_height + (paddle_depth * 2 ))
+    if (moveUpR) {
+        r_paddle.position.z += paddleSpeed;
+        
+    }
+    if (moveDownR){ 
+        r_paddle.position.z -= paddleSpeed;
+        
+    } 
+    if (moveUpL) {
+        l_paddle.position.z += paddleSpeed;
+    }
+    if (moveDownL) {l_paddle.position.z -= paddleSpeed;}
     
 
 
@@ -98,6 +142,7 @@ scene.onBeforeRenderObservable.add(() => {
    
     paddleMovement();
     ballMovement();
-    handleScore();
+    /*
+    handleScore(); */
 
 });

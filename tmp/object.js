@@ -76,7 +76,7 @@ const l_paddle = BABYLON.MeshBuilder.CreateBox("left paddle",paddle_opt,scene);
 l_paddle.position = new BABYLON.Vector3( l_paddle_pos_x, 0, 0); 
 
 const r_paddle = BABYLON.MeshBuilder.CreateBox("Right paddle",paddle_opt,scene);
-r_paddle.position = new BABYLON.Vector3(r_paddle_pos_x, 0, 0); 
+r_paddle.position = new BABYLON.Vector3(r_paddle_pos_x, 0,0); 
 
 /* ================= BALLS ================= */ 
 
